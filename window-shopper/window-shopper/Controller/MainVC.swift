@@ -13,6 +13,9 @@ class MainVC: UIViewController {
     @IBOutlet weak var wageTxt: CurrencyTextField!
     @IBOutlet weak var priceTxt: CurrencyTextField!
     
+    @IBOutlet weak var resultLbl: UILabel!
+    @IBOutlet weak var hoursLbl: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,11 +27,27 @@ class MainVC: UIViewController {
         
         wageTxt.inputAccessoryView = calcBtn
         priceTxt.inputAccessoryView = calcBtn
+        
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
     }
 
     @objc func calculate(){ //@objc to use objective-c feature
-        print("We got here")
-        
+        if let wageTxt = wageTxt.text, let priceTxt = priceTxt.text { //to check if fields were not empty
+            if let wage = Double(wageTxt), let price = Double(priceTxt) {//taking that text and trying to convert it into the numbers
+                view.endEditing(true)
+                resultLbl.isHidden = false
+                hoursLbl.isHidden = false
+                resultLbl.text = "\(Wage.getHours(forWage: wage, andPrice: price))" //using string interpolation to take an integer and changing it to the string
+            }
+        }
     }
+    @IBAction func clearCalculatorPressed(_ sender: Any) {
+        resultLbl.isHidden = true
+        hoursLbl.isHidden = true
+        wageTxt.text = ""
+        priceTxt.text = ""
+    }
+    
 }
 
